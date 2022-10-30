@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Member, MemberStatus } from './member.model';
 import { v1 as uuid } from 'uuid';
+import { CreateMemberDto } from './dto/create-member.dto';
 
 @Injectable()
 export class MembersService {
@@ -10,7 +11,9 @@ export class MembersService {
     return this.members;
   }
 
-  createMember(name: string, number: string) {
+  createMember(createMemberDto: CreateMemberDto) {
+    const { name, number } = createMemberDto;
+
     const member: Member = {
       id: uuid(), // uuid를 사용하여 유니크한 값을 id에 부여하기
       name,
