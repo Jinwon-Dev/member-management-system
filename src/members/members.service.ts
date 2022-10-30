@@ -12,7 +12,7 @@ export class MembersService {
   }
 
   createMember(createMemberDto: CreateMemberDto) {
-    // 게시물 생성 기능
+    // 회원 정보 생성 기능
     // DTO 적용
     const { name, number } = createMemberDto;
 
@@ -28,7 +28,12 @@ export class MembersService {
   }
 
   getMemberById(id: string): Member {
-    // 특정 ID의 게시물을 가져오는 기능
+    // 특정 ID의 회원 정보를 가져오는 기능
     return this.members.find((member) => member.id === id);
+  }
+
+  deleteMember(id: string): void {
+    // 특정 ID의 회원 정보를 삭제하는 기능
+    this.members = this.members.filter((member) => member.id !== id);
   }
 }
