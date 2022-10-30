@@ -1,6 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { MembersService } from './members.service';
-import { Member } from './member.model';
+import { Member, MemberStatus } from './member.model';
 import { CreateMemberDto } from './dto/create-member.dto';
 
 @Controller('members')
@@ -26,5 +34,13 @@ export class MembersController {
   @Delete('/:id') // 특정 ID의 회원 정보를 삭제하는 기능
   deleteMember(@Param('id') id: string): void {
     this.membersService.deleteMember(id);
+  }
+
+  @Patch('/:id/status') // 특정 ID의 회원 상태(등급)을 수정하는 기능
+  updateMemberStatus(
+    @Param('id') id: string,
+    @Body('status') status: MemberStatus,
+  ) {
+    return this.membersService.updateMemberStatus(id, status);
   }
 }

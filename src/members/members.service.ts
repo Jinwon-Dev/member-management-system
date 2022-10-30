@@ -36,4 +36,11 @@ export class MembersService {
     // 특정 ID의 회원 정보를 삭제하는 기능
     this.members = this.members.filter((member) => member.id !== id);
   }
+
+  updateMemberStatus(id: string, status: MemberStatus): Member {
+    // 특정 ID의 회원 상태(등급)를 수정하는 기능
+    const member = this.getMemberById(id);
+    member.status = status;
+    return member;
+  }
 }
