@@ -10,7 +10,7 @@ export class MembersService {
     return this.members;
   }
 
-  createMember(name: string, number: string, email: string) {
+  createMember(name: string, number: string) {
     const member: Member = {
       id: uuid(), // uuid를 사용하여 유니크한 값을 id에 부여하기
       name,

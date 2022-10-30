@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { Member } from './member.model';
 
@@ -9,5 +9,13 @@ export class MembersController {
   @Get('/')
   getAllMember(): Member[] {
     return this.membersService.getAllMembers();
+  }
+
+  @Post()
+  createMember(
+    @Body('name') name: string,
+    @Body('number') number: string,
+  ): Member {
+    return this.membersService.createMember(name, number);
   }
 }
