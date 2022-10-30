@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { Member } from './member.model';
 import { CreateMemberDto } from './dto/create-member.dto';
@@ -12,8 +12,14 @@ export class MembersController {
     return this.membersService.getAllMembers();
   }
 
-  @Post()
+  @Post() // 게시물 생성 기능
   createMember(@Body() createMemberDto: CreateMemberDto): Member {
+    // DTO 적용
     return this.membersService.createMember(createMemberDto);
+  }
+
+  @Get('/:id') // 특정 ID의 게시물을 가져오는 기능
+  getMemberById(@Param('id') id: string): Member {
+    return this.membersService.getMemberById(id);
   }
 }
