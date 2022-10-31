@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Member, MemberStatus } from './member.model';
 import { v1 as uuid } from 'uuid';
 import { CreateMemberDto } from './dto/create-member.dto';
@@ -29,7 +29,13 @@ export class MembersService {
 
   getMemberById(id: string): Member {
     // 특정 ID의 회원 정보를 가져오는 기능
-    return this.members.find((member) => member.id === id);
+    const found = this.members.find((member) => member.id === id);
+
+    if (!found) {
+      // 없는 ID의 회원 정보를 조회하려 할 때 예외 생성
+      throw new NotFoundException(`Can't find Member with id ${id}`);
+    }
+    return found;
   }
 
   deleteMember(id: string): void {
