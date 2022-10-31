@@ -6,6 +6,8 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { Member, MemberStatus } from './member.model';
@@ -21,6 +23,7 @@ export class MembersController {
   }
 
   @Post() // 회원 정보 생성 기능
+  @UsePipes(ValidationPipe) // 파이프를 이용한 유효성 체크
   createMember(@Body() createMemberDto: CreateMemberDto): Member {
     // DTO 적용
     return this.membersService.createMember(createMemberDto);
