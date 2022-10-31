@@ -12,6 +12,7 @@ import {
 import { MembersService } from './members.service';
 import { Member, MemberStatus } from './member.model';
 import { CreateMemberDto } from './dto/create-member.dto';
+import { MemberStatusValidationPipe } from './pipes/member-status-validation.pipe';
 
 @Controller('members')
 export class MembersController {
@@ -39,10 +40,10 @@ export class MembersController {
     this.membersService.deleteMember(id);
   }
 
-  @Patch('/:id/status') // 특정 ID의 회원 상태(등급)을 수정하는 기능
+  @Patch('/:id/status') // 특정 ID의 회원 상태(등급)를 수정하는 기능
   updateMemberStatus(
     @Param('id') id: string,
-    @Body('status') status: MemberStatus,
+    @Body('status', MemberStatusValidationPipe) status: MemberStatus, // 파이프를 이용하여 특정 ID의 회원 상태(등급)를 수정할 때 유효성 체크
   ) {
     return this.membersService.updateMemberStatus(id, status);
   }
