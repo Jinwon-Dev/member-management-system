@@ -32,7 +32,7 @@ export class MembersService {
     const found = this.members.find((member) => member.id === id);
 
     if (!found) {
-      // 없는 ID의 회원 정보를 조회하려 할 때 예외 생성
+      // 존재하지 않는 ID의 회원 정보를 조회하려 할 때 예외 생성
       throw new NotFoundException(`Can't find Member with id ${id}`);
     }
     return found;
@@ -40,7 +40,8 @@ export class MembersService {
 
   deleteMember(id: string): void {
     // 특정 ID의 회원 정보를 삭제하는 기능
-    this.members = this.members.filter((member) => member.id !== id);
+    const found = this.getMemberById(id); // 존재하지 않는 ID의 회원 정보를 삭제하려 할 때 에외 생성
+    this.members = this.members.filter((member) => member.id !== found.id);
   }
 
   updateMemberStatus(id: string, status: MemberStatus): Member {
