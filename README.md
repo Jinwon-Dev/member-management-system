@@ -7,18 +7,73 @@
 
 ---
 ## Project
-[Nest.js](https://docs.nestjs.com/)ë¥¼ ì´ìš©í•˜ì—¬ íšŒì› ê´€ë¦¬ ì‹œìŠ¤í…œì„ êµ¬í˜„í•©ë‹ˆë‹¤.
+[Nest.js](https://docs.nestjs.com/)¸¦ ÀÌ¿ëÇÏ¿© È¸¿ø °ü¸® ½Ã½ºÅÛÀ» ±¸ÇöÇÕ´Ï´Ù.
+
+</br>
+
+"°³ÀÎ Á¤º¸ º¸È£¸¦ À§ÇØ ¾÷·Îµå ÇÏÁö ¾ÊÀº ÆÄÀÏµéÀÌ ÀÖ½À´Ï´Ù."
+
+- `src/configs/typeorm.config.ts`
+  ```typescript
+  import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
+  export const typeormConfig: TypeOrmModuleOptions = {
+    type: 'postgres',
+    host: 'localhost',
+    port: 15432, // »ç¿ëÀÚ ÁöÁ¤ Æ÷Æ®
+    username: '[»ç¿ëÀÚ ÁöÁ¤ username]',
+    password: '[»ç¿ëÀÚ ÁöÁ¤ password]',
+    database: '[»ç¿ëÀÚ ÁöÁ¤ dbname]',
+    synchronize: true,
+    };
+    ```
+
+</br>
+
+- `docker/.env`
+  ```env
+  DB_NAME=[»ç¿ëÀÚ ÁöÁ¤ dbname]
+  DB_USER=[»ç¿ëÀÚ ÁöÁ¤ username]
+  DB_PASSWORD=[»ç¿ëÀÚ ÁöÁ¤ password]
+  POSTGRES_HOME=./postgres
+  ```
+
+</br>
+
+- `docker/docker-compose.yml`
+  ```yml
+  version: '3.9'
+  services:
+    database:
+      image: postgres
+      container_name: [»ç¿ëÀÚ ÁöÁ¤ dbname]
+      environment:
+        POSTGRES_DB: "${DB_NAME}"
+        POSTGRES_USER: "${DB_USER}"
+        POSTGRES_PASSWORD: "${DB_PASSWORD}"
+        POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C"
+      ports:
+        - 15432:5432
+      volumes:
+        - "${POSTGRES_HOME}/data/:/var/lib/postgresql/data/"
+  ```
+
+  </br>
 
 
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+</br>
+
 ## Installation
 
 ```bash
 $ npm install
 ```
+
+</br>
 
 ## Running the app
 
@@ -33,6 +88,8 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+</br>
+
 ## Test
 
 ```bash
@@ -46,15 +103,21 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+</br>
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+</br>
 
 ## Stay in touch
 
 - Author - [Kamil MyÅ›liwiec](https://kamilmysliwiec.com)
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
+
+</br>
 
 ## License
 
