@@ -10,25 +10,25 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
-import { MemberStatus } from './member-status.enum';
 import { CreateMemberDto } from './dto/create-member.dto';
-import { MemberStatusValidationPipe } from './pipes/member-status-validation.pipe';
+import { Member } from './member.entity';
 
 @Controller('members')
 export class MembersController {
   constructor(private membersService: MembersService) {} // dependency injection(의존성 주입)
 
-  // @Get('/')
-  // getAllMember(): Member[] {
-  //   return this.membersService.getAllMembers();
-  // }
-  //
-  // @Post() // 회원 정보 생성 기능
-  // @UsePipes(ValidationPipe) // 파이프를 이용한 유효성 체크
-  // createMember(@Body() createMemberDto: CreateMemberDto): Member {
-  //   // DTO 적용
-  //   return this.membersService.createMember(createMemberDto);
-  // }
+  @Post() // 회원 정보 생성 기능
+  @UsePipes(ValidationPipe) // 파이프를 이용한 유효성 체크
+  createMember(@Body() createMemberDto: CreateMemberDto): Promise<Member> {
+    // DTO 적용
+    return this.membersService.createMember(createMemberDto);
+  }
+
+  @Get('/:id') // 특정 ID의 회원 정보를 가져오는 기능
+  getMemberById(@Param('id') id: number): Promise<Member> {
+    return this.membersService.getMemberById(id);
+  }
+
   //
   // @Get('/:id') // 특정 ID의 회원 정보를 가져오는 기능
   // getMemberById(@Param('id') id: string): Member {

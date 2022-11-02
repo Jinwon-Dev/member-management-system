@@ -1,40 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MemberStatus } from './member-status.enum';
-import { v1 as uuid } from 'uuid';
 import { CreateMemberDto } from './dto/create-member.dto';
+import { MemberRepository } from './member.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Member } from './member.entity';
 
 @Injectable()
 export class MembersService {
-  // getAllMembers(): Member[] {
-  //   return this.members;
-  // }
-  //
-  // createMember(createMemberDto: CreateMemberDto) {
-  //   // 회원 정보 생성 기능
-  //   // DTO 적용
-  //   const { name, number } = createMemberDto;
-  //
-  //   const member: Member = {
-  //     id: uuid(), // uuid를 사용하여 유니크한 값을 id에 부여하기
-  //     name,
-  //     number,
-  //     status: MemberStatus.BASIC,
-  //   };
-  //
-  //   this.members.push(member);
-  //   return member;
-  // }
-  //
-  // getMemberById(id: string): Member {
-  //   // 특정 ID의 회원 정보를 가져오는 기능
-  //   const found = this.members.find((member) => member.id === id);
-  //
-  //   if (!found) {
-  //     // 존재하지 않는 ID의 회원 정보를 조회하려 할 때 예외 생성
-  //     throw new NotFoundException(`Can't find Member with id ${id}`);
-  //   }
-  //   return found;
-  // }
+  constructor(
+    @InjectRepository(Member)
+    private memberRepository: MemberRepository,
+  ) {}
+
+  async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
+    // 회원 정보 생성 기능
+    // DTO 적용
+    const { name, number } = createMemberDto;
+
+    const member = this.memberRepository.create({
+      name,
+      number,
+      status: MemberStatus.BASIC,
+    });
+
+    await this.memberRepository.save(member);
+    return member;
+  }
+
+  async getMemberById(id: number): Promise<Member> {
+    // 특정 ID의 회원 정보를 가져오는 기능
+    const found = await this.memberRepository.findOne(id);
+
+    if (!found) {
+      // 존재하지 않는 ID의 회원 정보를 조회하려 할 때 예외 생성
+      throw new NotFoundException(`can't find Member with id ${id}`);
+    }
+
+    return found;
+  }
+
   //
   // deleteMember(id: string): void {
   //   // 특정 ID의 회원 정보를 삭제하는 기능
