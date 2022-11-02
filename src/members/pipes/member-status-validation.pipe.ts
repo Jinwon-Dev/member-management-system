@@ -1,5 +1,5 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { MemberStatus } from '../member.model';
+import { MemberStatus } from '../member-status.enum';
 
 export class MemberStatusValidationPipe implements PipeTransform {
   // 유효성 체크를 위한 커스텀 파이프
