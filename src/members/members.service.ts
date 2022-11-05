@@ -27,6 +27,11 @@ export class MembersService {
     return member;
   }
 
+  async getAllMembers(): Promise<Member[]> {
+    // 모든 회원 정보를 가져오는 기능
+    return this.memberRepository.find();
+  }
+
   async getMemberById(id: number): Promise<Member> {
     // 특정 ID의 회원 정보를 가져오는 기능
     const found = await this.memberRepository.findOne(id);

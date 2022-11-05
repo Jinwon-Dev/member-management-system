@@ -27,6 +27,11 @@ export class MembersController {
     return this.membersService.createMember(createMemberDto);
   }
 
+  @Get() // 모든 회원 정보를 가져오는 기능
+  getAllMember(): Promise<Member[]> {
+    return this.membersService.getAllMembers();
+  }
+
   @Get('/:id') // 특정 ID의 회원 정보를 가져오는 기능
   getMemberById(@Param('id') id: number): Promise<Member> {
     return this.membersService.getMemberById(id);
