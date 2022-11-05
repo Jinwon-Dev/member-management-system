@@ -49,10 +49,13 @@ export class MembersService {
     }
   }
 
-  // updateMemberStatus(id: string, status: MemberStatus): Member {
-  //   // 특정 ID의 회원 상태(등급)를 수정하는 기능
-  //   const member = this.getMemberById(id);
-  //   member.status = status;
-  //   return member;
-  // }
+  async updateMemberStatus(id: number, status: MemberStatus): Promise<Member> {
+    // 특정 ID의 회원 상태(등급)를 수정하는 기능
+    const member = await this.getMemberById(id);
+
+    member.status = status;
+    await this.memberRepository.save(member);
+
+    return member;
+  }
 }
