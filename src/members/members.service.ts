@@ -39,13 +39,16 @@ export class MembersService {
     return found;
   }
 
-  //
-  // deleteMember(id: string): void {
-  //   // 특정 ID의 회원 정보를 삭제하는 기능
-  //   const found = this.getMemberById(id); // 존재하지 않는 ID의 회원 정보를 삭제하려 할 때 에외 생성
-  //   this.members = this.members.filter((member) => member.id !== found.id);
-  // }
-  //
+  async deleteMember(id: number): Promise<void> {
+    // 특정 ID의 회원 정보를 삭제하는 기능
+    const result = await this.memberRepository.delete(id);
+
+    if (result.affected === 0) {
+      // 존재하지 않는 ID의 회원 정보를 삭제하려 할 때 예외 생성
+      throw new NotFoundException(`Can't find Member with id ${id}`);
+    }
+  }
+
   // updateMemberStatus(id: string, status: MemberStatus): Member {
   //   // 특정 ID의 회원 상태(등급)를 수정하는 기능
   //   const member = this.getMemberById(id);
