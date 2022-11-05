@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
@@ -35,11 +36,12 @@ export class MembersController {
   //   return this.membersService.getMemberById(id);
   // }
   //
-  // @Delete('/:id') // 특정 ID의 회원 정보를 삭제하는 기능
-  // deleteMember(@Param('id') id: string): void {
-  //   this.membersService.deleteMember(id);
-  // }
-  //
+
+  @Delete('/:id') // 특정 ID의 회원 정보를 삭제하는 기능
+  deleteMember(@Param('id', ParseIntPipe) id): Promise<void> {
+    return this.membersService.deleteMember(id);
+  }
+
   // @Patch('/:id/status') // 특정 ID의 회원 상태(등급)를 수정하는 기능
   // updateMemberStatus(
   //   @Param('id') id: string,
