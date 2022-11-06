@@ -9,12 +9,14 @@ import { UserRepository } from './user.repository';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { User } from './user.entity';
 import * as bcrpyt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: UserRepository,
+    private jwtServices: JwtService,
   ) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
@@ -41,7 +43,9 @@ export class AuthService {
     }
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+  async signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
     // 로그인 기능
     const { username, password } = authCredentialsDto;
     const user = await this.userRepository.findOne({
@@ -49,7 +53,11 @@ export class AuthService {
     });
 
     if (user && (await bcrpyt.compare(password, user.password))) {
-      return 'login success';
+      // 유저 토큰 생성 (Secret + Payload)
+      const payload = { username };
+      const accessToken = await this.jwtServices.sign(payload);
+
+      return { accessToken };
     } else {
       // database에 해당하는 user가 없거나, 비밀번호가 일치하지 않을 시 로그인 실패
       throw new UnauthorizedException('login failed');
