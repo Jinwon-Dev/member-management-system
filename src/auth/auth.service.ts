@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
@@ -37,6 +38,21 @@ export class AuthService {
       } else {
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+    // 로그인 기능
+    const { username, password } = authCredentialsDto;
+    const user = await this.userRepository.findOne({
+      where: { username: username }, // 변경된 문법
+    });
+
+    if (user && (await bcrpyt.compare(password, user.password))) {
+      return 'login success';
+    } else {
+      // database에 해당하는 user가 없거나, 비밀번호가 일치하지 않을 시 로그인 실패
+      throw new UnauthorizedException('login failed');
     }
   }
 }
