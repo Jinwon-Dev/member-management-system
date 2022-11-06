@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { User } from './user.entity';
+import * as bcrpyt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,14 @@ export class AuthService {
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     // 회원 가입 기능
     const { username, password } = authCredentialsDto;
-    const user = this.userRepository.create({ username, password });
+
+    const salt = await bcrpyt.genSalt(); // bcrpyt 모듈을 이용하여 비밀번호 암호화
+    const hashedPassword = await bcrpyt.hash(password, salt);
+
+    const user = this.userRepository.create({
+      username,
+      password: hashedPassword,
+    });
 
     try {
       await this.userRepository.save(user);
