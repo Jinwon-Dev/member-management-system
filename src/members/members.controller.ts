@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   ParseIntPipe,
   Patch,
@@ -23,6 +24,7 @@ import { User } from '../auth/user.entity';
 @Controller('members')
 @UseGuards(AuthGuard()) // 인증된 유저만 회원 정보를 보거나 수정 가능
 export class MembersController {
+  private logger = new Logger('Members');
   constructor(private membersService: MembersService) {} // dependency injection(의존성 주입)
 
   @Post() // 회원 정보 생성 기능
@@ -32,11 +34,17 @@ export class MembersController {
     @GetUser() user: User, // 회원 정보를 생성할 때, 생성한 유저(관리자) 정보 넣어주기
   ): Promise<Member> {
     // DTO 적용
+    this.logger.verbose(
+      `User ${user.username} creating a new member. Payload: ${JSON.stringify(
+        createMemberDto,
+      )}`, // 로그 남기기
+    );
     return this.membersService.createMember(createMemberDto, user);
   }
 
   @Get() // 로그인한 해당 관리자가 생성한 모든 회원 정보를 가져오는 기능
   getAllMember(@GetUser() user: User): Promise<Member[]> {
+    this.logger.verbose(`User ${user.username} trying to get all members`); // 로그 남기기
     return this.membersService.getAllMembers(user);
   }
 
