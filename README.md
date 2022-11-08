@@ -89,6 +89,36 @@
 
 </br>
 
+- `src/auth/auth.module.ts`
+  ```typescript
+  @Injectable()
+  export class JwtStrategy extends PassportStrategy(Strategy) {
+    constructor(
+      @InjectRepository(User)
+      private userRepository: UserRepository,
+    ) {
+      super({
+        secretOrKey: '[사용자 지정 Secret Key]',
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      });
+    }
+
+    async validate(payload) {
+      const { username } = payload;
+      const user: User = await this.userRepository.findOne({
+        where: { username: username },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      return user;
+    }
+  }
+  ```
+
+</br>
 
 ## Description
 
