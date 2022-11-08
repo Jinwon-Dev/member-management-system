@@ -4,6 +4,7 @@
 
 *config*
 docker
+*jwt.strategy.ts*
 
 # Logs
 logs
