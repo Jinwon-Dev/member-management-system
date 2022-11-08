@@ -16,15 +16,18 @@
 - `src/configs/typeorm.config.ts`
   ```typescript
   import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+  import * as config from 'config';
 
-  export const typeormConfig: TypeOrmModuleOptions = {
-    type: 'postgres',
-    host: 'localhost',
-    port: 15432, // 사용자 지정 포트
-    username: '[사용자 지정 username]',
-    password: '[사용자 지정 password]',
-    database: '[사용자 지정 dbname]',
-    synchronize: true,
+  const dbConfig = config.get('db');
+
+  export const typeORMConfig: TypeOrmModuleOptions = {
+    type: dbConfig.type,
+    host: process.env.RDS_HOSTNAME || dbConfig.host,
+    port: process.env.RDS_PORT || dbConfig.port,
+    username: process.env.RDS_USERNAME || dbConfig.username,
+    password: process.env.RDS_PASSWORD || dbConfig.password,
+    database: process.env.RDS_DB_NAME || dbConfig.database,
+    synchronize: dbConfig.synchronize,
     };
     ```
 
@@ -119,6 +122,41 @@
   ```
 
 </br>
+
+- `config/default.yml`
+  ```yml
+  server:
+    port: 3000
+  db:
+    type: 'postgres'
+    port: 15432 
+    database: '[사용자 지정 dbname]'
+  jwt:
+    expiresIn: 3600
+  ```
+
+<br/>
+
+- `config/development.yml`
+  ```yml
+  db:
+    host: 'localhost'
+    username: '[사용자 지정 username]'
+    password: '[사용자 지정 password]'
+    synchronize: true
+  jwt:
+    secret: '[사용자 지정 Secret Key]'
+  ```
+
+<br/>
+
+- `production.yml`
+  ```yml
+  db:
+    synchronize: false
+  ```
+
+<br/>
 
 ## Description
 
