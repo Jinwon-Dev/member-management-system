@@ -4,6 +4,7 @@ import { CreateMemberDto } from './dto/create-member.dto';
 import { MemberRepository } from './member.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Member } from './member.entity';
+import { User } from '../auth/user.entity';
 
 @Injectable()
 export class MembersService {
@@ -12,7 +13,10 @@ export class MembersService {
     private memberRepository: MemberRepository,
   ) {}
 
-  async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
+  async createMember(
+    createMemberDto: CreateMemberDto,
+    user: User,
+  ): Promise<Member> {
     // 회원 정보 생성 기능
     // DTO 적용
     const { name, number } = createMemberDto;
@@ -21,6 +25,7 @@ export class MembersService {
       name,
       number,
       status: MemberStatus.BASIC,
+      user,
     });
 
     await this.memberRepository.save(member);
