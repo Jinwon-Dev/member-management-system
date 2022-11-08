@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,8 +16,10 @@ import { CreateMemberDto } from './dto/create-member.dto';
 import { Member } from './member.entity';
 import { MemberStatusValidationPipe } from './pipes/member-status-validation.pipe';
 import { MemberStatus } from './member-status.enum';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('members')
+@UseGuards(AuthGuard()) // 인증된 유저만 회원 정보를 보거나 수정 가능
 export class MembersController {
   constructor(private membersService: MembersService) {} // dependency injection(의존성 주입)
 
