@@ -32,9 +32,15 @@ export class MembersService {
     return member;
   }
 
-  async getAllMembers(): Promise<Member[]> {
-    // 모든 회원 정보를 가져오는 기능
-    return this.memberRepository.find();
+  async getAllMembers(user: User): Promise<Member[]> {
+    // 해당 관리자가 생성한 모든 회원 정보를 가져오는 기능
+    const query = this.memberRepository.createQueryBuilder('member');
+
+    query.where('member.userId = :userId', { userId: user.id });
+
+    const members = await query.getMany();
+
+    return members;
   }
 
   async getMemberById(id: number): Promise<Member> {
