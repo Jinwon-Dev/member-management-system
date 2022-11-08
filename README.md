@@ -89,7 +89,7 @@
 
 </br>
 
-- `src/auth/auth.module.ts`
+- `src/auth/jwt.strategy.ts`
   ```typescript
   @Injectable()
   export class JwtStrategy extends PassportStrategy(Strategy) {
