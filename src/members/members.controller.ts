@@ -35,7 +35,7 @@ export class MembersController {
     return this.membersService.createMember(createMemberDto, user);
   }
 
-  @Get() // 해당 관리자가 생성한 모든 회원 정보를 가져오는 기능
+  @Get() // 로그인한 해당 관리자가 생성한 모든 회원 정보를 가져오는 기능
   getAllMember(@GetUser() user: User): Promise<Member[]> {
     return this.membersService.getAllMembers(user);
   }
@@ -45,9 +45,12 @@ export class MembersController {
     return this.membersService.getMemberById(id);
   }
 
-  @Delete('/:id') // 특정 ID의 회원 정보를 삭제하는 기능
-  deleteMember(@Param('id', ParseIntPipe) id): Promise<void> {
-    return this.membersService.deleteMember(id);
+  @Delete('/:id') // 로그인한 해당 관리자가 생성한 특정 ID의 회원 정보를 삭제하는 기능
+  deleteMember(
+    @Param('id', ParseIntPipe) id,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.membersService.deleteMember(id, user);
   }
 
   @Patch('/:id/status') // 특정 ID의 회원 상태(등급)를 수정하는 기능

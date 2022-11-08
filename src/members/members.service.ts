@@ -33,7 +33,7 @@ export class MembersService {
   }
 
   async getAllMembers(user: User): Promise<Member[]> {
-    // 해당 관리자가 생성한 모든 회원 정보를 가져오는 기능
+    // 로그인한 해당 관리자가 생성한 모든 회원 정보를 가져오는 기능
     const query = this.memberRepository.createQueryBuilder('member');
 
     query.where('member.userId = :userId', { userId: user.id });
@@ -55,9 +55,9 @@ export class MembersService {
     return found;
   }
 
-  async deleteMember(id: number): Promise<void> {
-    // 특정 ID의 회원 정보를 삭제하는 기능
-    const result = await this.memberRepository.delete(id);
+  async deleteMember(id: number, user: User): Promise<void> {
+    // 로그인한 해당 관리자가 생성한 특정 ID의 회원 정보를 삭제하는 기능
+    const result = await this.memberRepository.delete({ id, user });
 
     if (result.affected === 0) {
       // 존재하지 않는 ID의 회원 정보를 삭제하려 할 때 예외 생성
